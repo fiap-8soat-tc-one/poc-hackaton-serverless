@@ -135,6 +135,6 @@ Siga os passos abaixo para configurar e executar o ambiente Kubernetes:
 
 8️⃣ **Executar os manifestos do diretório `kubernetes/funcs/*.yaml`**
 
-- A ordem de execução dos arquivos dentro de `kubernetes/funcs/` não é relevante, pois cada arquivo é independente.
+**A ordem de execução dos arquivos dentro de `kubernetes/funcs/` não é relevante, pois cada arquivo é independente.**
 
 
