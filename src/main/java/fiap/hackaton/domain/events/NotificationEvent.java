@@ -1,4 +1,4 @@
-package fiap.hackaton.functions.domain.models;
+package fiap.hackaton.domain.events;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,7 +10,9 @@ public class NotificationEvent {
     @JsonProperty("Message")
     private String Message;
 
-    public NotificationEvent() {}
+    public NotificationEvent() {
+    }
+
     public NotificationEvent(String email, String message) {
         Email = email;
         Message = message;

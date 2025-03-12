@@ -1,4 +1,4 @@
-package fiap.hackaton.functions;
+package fiap.hackaton.application.functions;
 
 import com.microsoft.azure.functions.HttpMethod;
 import com.microsoft.azure.functions.HttpRequestMessage;
@@ -9,7 +9,7 @@ import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
 import com.microsoft.azure.functions.mysql.annotation.CommandType;
 import com.microsoft.azure.functions.mysql.annotation.MySqlInput;
-import fiap.hackaton.functions.domain.models.Session;
+import fiap.hackaton.domain.entities.Session;
 
 import java.util.Optional;
 

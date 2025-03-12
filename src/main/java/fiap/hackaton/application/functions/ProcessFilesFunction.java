@@ -1,4 +1,4 @@
-package fiap.hackaton.functions;
+package fiap.hackaton.application.functions;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,9 +9,9 @@ import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.mysql.annotation.MySqlOutput;
 import com.microsoft.azure.functions.rabbitmq.annotation.RabbitMQOutput;
 import com.microsoft.azure.functions.rabbitmq.annotation.RabbitMQTrigger;
-import fiap.hackaton.functions.domain.enums.FileStatus;
-import fiap.hackaton.functions.domain.models.NotificationEvent;
-import fiap.hackaton.functions.domain.models.Session;
+import fiap.hackaton.domain.entities.Session;
+import fiap.hackaton.domain.enums.FileStatus;
+import fiap.hackaton.domain.events.NotificationEvent;
 
 public class ProcessFilesFunction {
     @FunctionName("ProcessFilesFunction")
@@ -25,7 +25,7 @@ public class ProcessFilesFunction {
         ObjectMapper objectMapper = new ObjectMapper();
         Session session = objectMapper.readValue(message, Session.class);
 
-        if(session != null) {
+        if (session != null) {
             context.getLogger().info("[Processor]: Initialize Process Files Function from event: " + session.getSessionId());
 
             // TODO Get Files from Bucket and process zip.

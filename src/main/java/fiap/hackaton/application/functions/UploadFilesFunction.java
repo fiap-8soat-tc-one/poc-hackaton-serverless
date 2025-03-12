@@ -1,4 +1,4 @@
-package fiap.hackaton.functions;
+package fiap.hackaton.application.functions;
 
 import com.microsoft.azure.functions.*;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
@@ -6,8 +6,8 @@ import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
 import com.microsoft.azure.functions.mysql.annotation.MySqlOutput;
 import com.microsoft.azure.functions.rabbitmq.annotation.RabbitMQOutput;
-import fiap.hackaton.functions.domain.enums.FileStatus;
-import fiap.hackaton.functions.domain.models.Session;
+import fiap.hackaton.domain.entities.Session;
+import fiap.hackaton.domain.enums.FileStatus;
 
 import java.util.Optional;
 import java.util.UUID;

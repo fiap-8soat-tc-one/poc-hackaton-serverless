@@ -1,4 +1,4 @@
-package fiap.hackaton.functions.domain.enums;
+package fiap.hackaton.domain.enums;
 
 public enum FileStatus {
     PROCESSING,

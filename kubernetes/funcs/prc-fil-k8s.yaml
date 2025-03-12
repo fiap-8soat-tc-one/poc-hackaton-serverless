@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: fnc-prc-fil-csm
-          image: jcmds/fiap-functions-apis:20251103.1
+          image: jcmds/fiap-functions-apis:20251103.2
           imagePullPolicy: Always
           env:
             - name: AzureWebJobsSecretStorageType
@@ -78,12 +78,12 @@ spec:
   minReplicaCount: 0
   maxReplicaCount: 10
   triggers:
-  - type: rabbitmq
-    metadata:
-      protocol: amqp
-      queueName: outputQueue
-      mode: QueueLength
-      value: "1"
-    authenticationRef:
-      name: keda-trigger-auth-rabbitmq-conn
+    - type: rabbitmq
+      metadata:
+        protocol: amqp
+        queueName: outputQueue
+        mode: QueueLength
+        value: "1"
+      authenticationRef:
+        name: keda-trigger-auth-rabbitmq-conn
 

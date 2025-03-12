@@ -4,20 +4,23 @@
 
 Antes de iniciar, certifique-se de que possui as seguintes ferramentas instaladas:
 
-- 🏗️ [Azure Functions Tools para desenvolvimento local](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local?tabs=windows%2Cisolated-process%2Cnode-v4%2Cpython-v2%2Chttp-trigger%2Ccontainer-apps&pivots=programming-language-java)
+-
+🏗️ [Azure Functions Tools para desenvolvimento local](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local?tabs=windows%2Cisolated-process%2Cnode-v4%2Cpython-v2%2Chttp-trigger%2Ccontainer-apps&pivots=programming-language-java)
 - 🐳 [Docker](https://www.docker.com/)
 - ☸️ [Kubernetes](https://kubernetes.io/)
 - ☕ [Java 17+](https://openjdk.org/projects/jdk/17/) / [Maven](https://maven.apache.org/)
 - 🛢️ [MySQL](https://www.mysql.com/) instalado localmente ou via container
 - 📩 [RabbitMQ](https://www.rabbitmq.com/) instalado localmente ou via container
-- 🚀 [Intellij](https://www.jetbrains.com/pt-br/idea/download/?section=windows) Como IDE recomendada e a instalação do plugin [Azure Toolkit Intellij](https://plugins.jetbrains.com/plugin/8053-azure-toolkit-for-intellij)
+- 🚀 [Intellij](https://www.jetbrains.com/pt-br/idea/download/?section=windows) Como IDE recomendada e a instalação do
+  plugin [Azure Toolkit Intellij](https://plugins.jetbrains.com/plugin/8053-azure-toolkit-for-intellij)
 
 ## Execução Local
 
 1. Para execução local, primeiro criar o seguinte arquivo na raiz do projeto:
 
-   - **🔹 Nome do arquivo:** `local.settings.json`
-   - **🔹 Conteúdo:** 
+    - **🔹 Nome do arquivo:** `local.settings.json`
+    - **🔹 Conteúdo:**
+
 ```json
 {
   "IsEncrypted": false,
@@ -40,7 +43,8 @@ Antes de iniciar, certifique-se de que possui as seguintes ferramentas instalada
     - **🔹 Para execução local**: defina dentro do arquivo `local.settings.json`.
     - **🔹 Para execução no Kubernetes**: defina dentro do arquivo `kubernetes/infra/secrets`.
 
-2. Utilize a interface gráfica de sua preferência e execute o script localizado em `scripts/mysql.sql` para criar o banco de dados e a tabela.
+2. Utilize a interface gráfica de sua preferência e execute o script localizado em `scripts/mysql.sql` para criar o
+   banco de dados e a tabela.
 
 3. Para configurar o MySQL dentro do cluster Kubernetes local, utilize o seguinte comando **Helm**:
 
@@ -52,9 +56,11 @@ Antes de iniciar, certifique-se de que possui as seguintes ferramentas instalada
      --set auth.password=test_password
    ```
 
-   **⚠️ Nota:** A *secret* versionada neste repositório já contempla a `connectionString` correspondente a essa configuração. Qualquer alteração precisa ser revalidada.
+   **⚠️ Nota:** A *secret* versionada neste repositório já contempla a `connectionString` correspondente a essa
+   configuração. Qualquer alteração precisa ser revalidada.
 
-4. Se o cluster local for gerado pelo script KIND (`kubernetes/infra/kc.yaml`), exponha o MySQL na porta `30081` com o seguinte comando:
+4. Se o cluster local for gerado pelo script KIND (`kubernetes/infra/kc.yaml`), exponha o MySQL na porta `30081` com o
+   seguinte comando:
 
    ```sh
    kubectl patch svc mysql-demo -p '{"spec": {"type": "NodePort", "ports": [{"port": 3306, "nodePort": 30081}]}}'
@@ -77,9 +83,11 @@ Antes de iniciar, certifique-se de que possui as seguintes ferramentas instalada
      --set auth.username=admin --set auth.password=admin --set persistence.enabled=false
    ```
 
-   **⚠️ Nota:** A *secret* versionada neste repositório já contempla a `connectionString` correspondente a essa configuração. Qualquer alteração precisa ser revalidada.
+   **⚠️ Nota:** A *secret* versionada neste repositório já contempla a `connectionString` correspondente a essa
+   configuração. Qualquer alteração precisa ser revalidada.
 
-3. Se o cluster local for gerado pelo script KIND (`kubernetes/infra/kc.yaml`), exponha o RabbitMQ nas portas `30088` (broker) e `30086` (portal de gerenciamento) com o seguinte comando:
+3. Se o cluster local for gerado pelo script KIND (`kubernetes/infra/kc.yaml`), exponha o RabbitMQ nas portas `30088` (
+   broker) e `30086` (portal de gerenciamento) com o seguinte comando:
 
    ```sh
    kubectl patch svc rabbitmq -n fiap-hackathon -p '{"spec": {"type": "NodePort", "ports": [{"port": 5672, "nodePort": 30088}, {"port": 15672, "nodePort": 30086}]}}'
@@ -90,7 +98,9 @@ Antes de iniciar, certifique-se de que possui as seguintes ferramentas instalada
 Utilize a tecnologia que melhor lhe convier, como **K3s**, **KIND** ou **MicroK8s**.
 
 ### 🔹 Recomendações
-Minha recomendação é utilizar o [KIND](https://kind.sigs.k8s.io/docs/user/quick-start/#installation). Caso opte por ele, será necessário instalar o **metric-server**:
+
+Minha recomendação é utilizar o [KIND](https://kind.sigs.k8s.io/docs/user/quick-start/#installation). Caso opte por ele,
+será necessário instalar o **metric-server**:
 
 ```sh
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml

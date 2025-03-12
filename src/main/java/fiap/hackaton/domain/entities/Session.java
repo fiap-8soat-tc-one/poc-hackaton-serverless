@@ -1,7 +1,7 @@
-package fiap.hackaton.functions.domain.models;
+package fiap.hackaton.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fiap.hackaton.functions.domain.enums.FileStatus;
+import fiap.hackaton.domain.enums.FileStatus;
 
 import java.util.UUID;
 

@@ -9,15 +9,15 @@ metadata:
   name: fnc-upl-fil-api-svc
   namespace: fiap-hackaton
   labels:
-      app: fnc-upl-fil-api
+    app: fnc-upl-fil-api
 spec:
   type: ClusterIP
   ports:
     - name: port
       port: 80
   selector:
-      app: fnc-upl-fil-api
----    
+    app: fnc-upl-fil-api
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -38,7 +38,7 @@ spec:
     spec:
       containers:
         - name: fnc-upl-fil-api
-          image: jcmds/fiap-functions-apis:20251103.1
+          image: jcmds/fiap-functions-apis:20251103.2
           imagePullPolicy: Always
           env:
             - name: AzureWebJobsSecretStorageType

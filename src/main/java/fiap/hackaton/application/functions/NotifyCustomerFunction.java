@@ -1,4 +1,4 @@
-package fiap.hackaton.functions;
+package fiap.hackaton.application.functions;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,7 +8,7 @@ import com.microsoft.azure.functions.annotation.FixedDelayRetry;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.SendGridOutput;
 import com.microsoft.azure.functions.rabbitmq.annotation.RabbitMQTrigger;
-import fiap.hackaton.functions.domain.models.NotificationEvent;
+import fiap.hackaton.domain.events.NotificationEvent;
 
 
 public class NotifyCustomerFunction {
@@ -39,7 +39,7 @@ public class NotifyCustomerFunction {
 
         context.getLogger().info("[Processor]: Initialize Noitify consumer from to-address: " + toAddress);
 
-        if(!toAddress.isEmpty() && !value.isEmpty()) {
+        if (!toAddress.isEmpty() && !value.isEmpty()) {
             final String template = "{\"personalizations\":" +
                     "[{\"to\":[{\"email\":\"%s\"}]," +
                     "\"subject\":\"Sending with SendGrid\"}]," +
@@ -47,7 +47,7 @@ public class NotifyCustomerFunction {
                     "\"content\":[{\"type\":\"text/plain\",\"value\": \"%s\"}]}";
 
 
-            final String body = String.format(template, toAddress ,fromEmail, value);
+            final String body = String.format(template, toAddress, fromEmail, value);
             sendGridOutputBinding.setValue(body);
             context.getLogger().info("[Processor]: Finish Noitify consumer from to-address: " + toAddress);
         } else {
