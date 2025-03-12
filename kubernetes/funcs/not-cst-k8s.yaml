@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: fiap-hackaton
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fnc-not-cst-csm
+  namespace: fiap-hackaton
+  labels:
+    app: fnc-not-cst-csm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fnc-not-cst-csm
+  template:
+    metadata:
+      name: fnc-not-cst-csm
+      labels:
+        app: fnc-not-cst-csm
+    spec:
+      containers:
+        - name: fnc-not-cst-csm
+          image: jcmds/fiap-functions-apis:20251103.1
+          imagePullPolicy: Always
+          env:
+            - name: AzureWebJobsSecretStorageType
+              value: "UseDevelopmentStorage=true"
+            - name: AzureFunctionsJobHost__logging__fileLoggingMode
+              value: "debugOnly"
+            - name: AzureFunctionsJobHost__logging__logLevel__Custom
+              value: "Information"
+            - name: AzureFunctionsJobHost__logging__logLevel__default
+              value: "Information"
+            - name: AzureFunctionsJobHost__logging__logLevel__Function
+              value: "Information"
+            - name: AzureFunctionsJobHost__functions__0
+              value: "NotifyCustomerFunction"
+            - name: WEBSITE_ENABLE_SYNC_UPDATE_SITE
+              value: "true"
+            - name: WEBSITE_RUN_FROM_PACKAGE
+              value: "1"
+            - name: WEBSITE_TIME_ZONE
+              value: "E. South America Standard Time"
+            - name: WEBSITES_ENABLE_APP_SERVICE_STORAGE
+              value: "true"
+            - name: RabbitMqConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: host
+            - name: NotifyQueue
+              value: "notifyQueue"
+            - name: SendGridApiKey
+              value: "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"
+          ports:
+            - containerPort: 80
+              protocol: TCP
+      restartPolicy: Always
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: fnc-not-cst-csm-hpa
+  namespace: fiap-hackaton
+spec:
+  scaleTargetRef:
+    name: fnc-not-cst-csm
+  pollingInterval: 15
+  cooldownPeriod: 60
+  minReplicaCount: 0
+  maxReplicaCount: 10
+  triggers:
+    - type: rabbitmq
+      metadata:
+        protocol: amqp
+        queueName: notifyQueue
+        mode: QueueLength
+        value: "1"
+      authenticationRef:
+        name: keda-trigger-auth-rabbitmq-conn
+

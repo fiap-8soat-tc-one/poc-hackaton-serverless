@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: fiap-hackaton
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fnc-upl-fil-api-svc
+  namespace: fiap-hackaton
+  labels:
+      app: fnc-upl-fil-api
+spec:
+  type: ClusterIP
+  ports:
+    - name: port
+      port: 80
+  selector:
+      app: fnc-upl-fil-api
+---    
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fnc-upl-fil-api
+  namespace: fiap-hackaton
+  labels:
+    app: fnc-upl-fil-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fnc-upl-fil-api
+  template:
+    metadata:
+      name: fnc-upl-fil-api
+      labels:
+        app: fnc-upl-fil-api
+    spec:
+      containers:
+        - name: fnc-upl-fil-api
+          image: jcmds/fiap-functions-apis:20251103.1
+          imagePullPolicy: Always
+          env:
+            - name: AzureWebJobsSecretStorageType
+              value: "UseDevelopmentStorage=true"
+            - name: AzureFunctionsJobHost__logging__fileLoggingMode
+              value: "debugOnly"
+            - name: AzureFunctionsJobHost__logging__logLevel__Custom
+              value: "Information"
+            - name: AzureFunctionsJobHost__logging__logLevel__default
+              value: "Information"
+            - name: AzureFunctionsJobHost__logging__logLevel__Function
+              value: "Information"
+            - name: AzureFunctionsJobHost__functions__0
+              value: "UploadFilesFunction"
+            - name: WEBSITE_ENABLE_SYNC_UPDATE_SITE
+              value: "true"
+            - name: WEBSITE_RUN_FROM_PACKAGE
+              value: "1"
+            - name: WEBSITE_TIME_ZONE
+              value: "E. South America Standard Time"
+            - name: WEBSITES_ENABLE_APP_SERVICE_STORAGE
+              value: "true"
+            - name: MySqlConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: connectionString
+            - name: RabbitMqConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: host
+            - name: RabbitMqOutQueueName
+              value: "outputQueue"
+          ports:
+            - containerPort: 80
+              protocol: TCP
+      restartPolicy: Always

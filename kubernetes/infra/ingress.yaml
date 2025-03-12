@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: fnc-files-ingress
+  namespace: fiap-hackaton
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: fiap-api.local
+      http:
+        paths:
+          # Rota para POST -> fnc-upl-fil-api-svc
+          - path: /api/v1/files
+            pathType: Prefix
+            backend:
+              service:
+                name: fnc-upl-fil-api-svc
+                port:
+                  number: 80
+          # Rota para GET -> fnc-get-fil-api-svc
+          - path: /api/v1/files/
+            pathType: Prefix
+            backend:
+              service:
+                name: fnc-get-fil-api-svc
+                port:
+                  number: 80

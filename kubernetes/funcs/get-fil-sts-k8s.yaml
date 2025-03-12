@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: fiap-hackaton
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fnc-get-fil-api-svc
+  namespace: fiap-hackaton
+  labels:
+      app: fnc-get-fil-api
+spec:
+  type: ClusterIP
+  ports:
+    - name: port
+      port: 80
+  selector:
+      app: fnc-get-fil-api
+---    
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fnc-get-fil-api
+  namespace: fiap-hackaton
+  labels:
+    app: fnc-get-fil-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fnc-get-fil-api
+  template:
+    metadata:
+      name: fnc-get-fil-api
+      labels:
+        app: fnc-get-fil-api
+    spec:
+      containers:
+        - name: fnc-get-fil-api
+          image: jcmds/fiap-functions-apis:20251103.1
+          imagePullPolicy: Always
+          env:
+            - name: AzureWebJobsSecretStorageType
+              value: "UseDevelopmentStorage=true"
+            - name: AzureFunctionsJobHost__logging__fileLoggingMode
+              value: "debugOnly"
+            - name: AzureFunctionsJobHost__logging__logLevel__Custom
+              value: "Information"
+            - name: AzureFunctionsJobHost__logging__logLevel__default
+              value: "Information"
+            - name: AzureFunctionsJobHost__logging__logLevel__Function
+              value: "Information"
+            - name: AzureFunctionsJobHost__functions__0
+              value: "GetFilesStatusFunction"
+            - name: WEBSITE_ENABLE_SYNC_UPDATE_SITE
+              value: "true"
+            - name: WEBSITE_RUN_FROM_PACKAGE
+              value: "1"
+            - name: WEBSITE_TIME_ZONE
+              value: "E. South America Standard Time"
+            - name: WEBSITES_ENABLE_APP_SERVICE_STORAGE
+              value: "true"
+            - name: MySqlConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: connectionString
+          ports:
+            - containerPort: 80
+              protocol: TCP
+      restartPolicy: Always
+---
+#apiVersion: http.keda.sh/v1alpha1
+#kind: HTTPScaledObject
+#metadata:
+#  name: fnc-get-fil-api-hpa
+#  namespace: fiap-hackaton
+#spec:
+#  scaleTargetRef:
+#    name: fnc-get-fil-api
+#    kind: Deployment
+#    service: fnc-get-fil-api-svc
+#    port: 80
+#  replicas:
+#    min: 1
+#    max: 10
+#  scaledownPeriod: 300
+#  scalingMetric:
+#    requestRate:
+#      granularity: 1s
+#      targetValue: 100
+#      window: 1m
