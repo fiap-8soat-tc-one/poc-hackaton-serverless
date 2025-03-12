@@ -10,6 +10,29 @@ Antes de iniciar, certifique-se de que possui as seguintes ferramentas instalada
 - ☕ [Java 17+](https://openjdk.org/projects/jdk/17/) / [Maven](https://maven.apache.org/)
 - 🛢️ [MySQL](https://www.mysql.com/) instalado localmente ou via container
 - 📩 [RabbitMQ](https://www.rabbitmq.com/) instalado localmente ou via container
+- 🚀 [Intellij](https://www.jetbrains.com/pt-br/idea/download/?section=windows) Como IDE recomendada e a instalação do plugin [Azure Toolkit Intellij](https://plugins.jetbrains.com/plugin/8053-azure-toolkit-for-intellij)
+
+## Execução Local
+
+1. Para execução local, primeiro criar o seguinte arquivo na raiz do projeto:
+
+   - **🔹 Nome do arquivo:** `local.settings.json`
+   - **🔹 Conteúdo:** 
+```json
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "java",
+    "MySqlConnectionString": "Server=localhost;Port=30081;Database=test;Uid=test_user;Pwd=test_password;",
+    "RabbitMqConnectionString": "amqp://admin:admin@localhost:30088/",
+    "RabbitMqOutQueueName": "outputQueue",
+    "SendGridApiKey": "",
+    "NotifyQueue": "notifyQueue"
+  }
+}
+
+```
 
 ## 🛠️ Configuração do MySQL
 
